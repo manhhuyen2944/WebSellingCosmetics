@@ -1,0 +1,173 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Admin\" />
+    <Folder Include="UpLoads\Images\Product\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\LayoutAdmin\.DS_Store" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
+    <PackageReference Include="ClosedXML" Version="0.102.1" />
+    <PackageReference Include="EPPlus" Version="6.2.11" />
+    <PackageReference Include="MailKit" Version="4.3.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.18" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.18" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.18">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+    <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
+    <PackageReference Include="UnidecodeSharpFork" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="UpLoads\Images\Admin\Admin.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Admin\AdminDeMo.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\but-ke-mat-cocute-dang-long-chong-nuoc-lau-troi-35g.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\co-trang-diem-brushes.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\mac-runway-hit.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\mac-whirl.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\nuoc-tay-trang-3-in-1-loreal-micellar-lam-sach-sau-chai-400ml.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\nuoc-tay-trang-bioderma-nuoc-tay-trang-cho-da-dau.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\nuoc-tay-trang-garnier-xanh-danh-cho-da-dau-mun-nhay-cam.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\nuoc-tay-trang-garnier-xanh-giup-sach-da-toi-uu-pv312-nuoc-tay-trang-cho-da-dau.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\nuoc-tay-trang-innisfree-green-tea-pure-cleansing-water-nuoc-tay-trang-han-quoc.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\nuoc-tay-trang-la-roche-posay-danh-cho-da-nhay-cam-water-ultra-sensitive-skin-200ml.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\nuoc-tay-trang-svr-sebiaclear-eau-micellaire.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\nuoc-tay-trang-svr.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\son-mac-matte-lipstick.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\son-mac-retro-matte-liquid-lipcolour.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\son-mac-retro-matte-liquid.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\son-mac-retro-matte.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\son-mac-ulitimate.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\son-mac.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\son-mac1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\Product\son-mac1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\but-ke-mat-cocute-dang-long-chong-nuoc-lau-troi-35g112024-81000-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\co-trang-diem-brushes12312023-80900-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\mac-runway-hit112024-75900-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\mac-whirl112024-14800-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\mac-whirl12312023-14600-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\nuoc-tay-trang-3-in-1-loreal-micellar-lam-sach-sau-chai-400ml12312023-80600-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\nuoc-tay-trang-bioderma-nuoc-tay-trang-cho-da-dau112024-81600-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\nuoc-tay-trang-garnier-xanh-danh-cho-da-dau-mun-nhay-cam112024-80800-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\nuoc-tay-trang-garnier-xanh-giup-sach-da-toi-uu-pv312-nuoc-tay-trang-cho-da-dau112024-81600-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\nuoc-tay-trang-innisfree-green-tea-pure-cleansing-water-nuoc-tay-trang-han-quoc112024-81600-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\nuoc-tay-trang-la-roche-posay-danh-cho-da-nhay-cam-water-ultra-sensitive-skin-200ml112024-80800-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\nuoc-tay-trang-svr-112024-81700-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\nuoc-tay-trang-svr-sebiaclear-eau-micellaire112024-80800-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\son-mac-matte-lipstick112024-80400-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\son-mac-retro-matte-liquid-112024-80600-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\son-mac-retro-matte-liquid-lipcolour12312023-80000-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\son-mac-retro-matte112024-80500-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\son-mac-ulitimate112024-80500-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\son-mac112024-14200-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\ReceiptProduct\son-mac112024-80300-pm.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\User\huyen6.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\User\khangne.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="UpLoads\Images\User\UserDemo.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

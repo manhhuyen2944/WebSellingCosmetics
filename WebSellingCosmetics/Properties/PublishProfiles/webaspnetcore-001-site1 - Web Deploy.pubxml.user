@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword />
+    <History>True|2024-01-21T13:08:10.1338829Z;True|2024-01-21T17:22:47.3047574+07:00;True|2024-01-21T17:11:38.8242290+07:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="WebMyPham">
+      <Value>Data Source=SQL5080.site4now.net%3bInitial Catalog=db_aa3319_webaspnetcore%3bUser Id=db_aa3319_webaspnetcore_admin%3bPassword=12345qwert</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

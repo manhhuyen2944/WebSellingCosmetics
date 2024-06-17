@@ -1,0 +1,161 @@
+﻿@model Product
+
+
+<style>
+    .icon-hover:hover {
+        border-color: #3b71ca !important;
+        background-color: white !important;
+        color: #3b71ca !important;
+    }
+
+        .icon-hover:hover i {
+            color: #3b71ca !important;
+        }
+</style>
+
+<!-- Page Header Start -->
+<div class="container-fluid page-header wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <h1 class="display-3 mb-3 animated slideInDown">Chi tiết sản phẩm</h1>
+        <nav aria-label="breadcrumb animated slideInDown">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a class="text-body" href="#">Home</a></li>
+                <li class="breadcrumb-item"><a class="text-body" href="#">Pages</a></li>
+                <li class="breadcrumb-item text-dark active" aria-current="page">Details</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Page Header End -->
+<div class="d-flex justify-content-center">
+    <div class="col-10" style="margin-top: 50px;">
+        <div class="product-item">
+
+
+
+            <!-- content -->
+            <section class="py-5">
+                <div class="container">
+                    <div class="row gx-5">
+                        <aside class="col-lg-6">
+                            <div class="border rounded-4 mb-3 d-flex justify-content-center">
+                                <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="#">
+                                    <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="@Url.Content("~/contents/Images/Product/" + Model.Image)" />
+                                </a>
+                            </div>
+                            <div class="d-flex justify-content-center mb-3">
+                                <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="#" class="item-thumb">
+                                    <img width="60" height="60" class="rounded-2" src="@Url.Content("~/contents/Images/Product/" + Model.Image1)" />
+                                </a>
+                                <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="#" class="item-thumb">
+                                    <img width="60" height="60" class="rounded-2" src="@Url.Content("~/contents/Images/Product/" + Model.Image2)" />
+                                </a>
+                                <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" href="#" class="item-thumb">
+                                    <img width="60" height="60" class="rounded-2" src="@Url.Content("~/contents/Images/Product/" + Model.Image3)" />
+                                </a>
+                             
+                            </div>
+                            <!-- thumbs-wrap.// -->
+                            <!-- gallery-wrap .end// -->
+                        </aside>
+                        <main class="col-lg-6">
+                            <div class="ps-lg-3">
+                                <h4 class="title text-dark">
+                                    @Model.Name
+                                </h4>
+                                <div class="d-flex flex-row my-3">
+                                    <div class="text-warning mb-1 me-2">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <span class="ms-1">
+                                            4.5
+                                        </span>
+                                    </div>
+                                    <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 Đơn hàng</span>
+                                    <span class="text-success ms-2">đã bán</span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <span class="text-body text-decoration-line-through">@string.Format("{0:N0}", Model.Price + 100000) VNĐ</span>
+                                    <span class="h5"> @string.Format("{0:N0}", Model.Price) VNĐ</span>
+                                    <span class="text-muted">/Sản phẩm</span>
+                                </div>
+
+                                <p>
+                                    @Model.Description
+                                </p>
+
+                                @*        <div class="row">
+                                <dt class="col-3">Type:</dt>
+                                <dd class="col-9">Regular</dd>
+
+                                <dt class="col-3">Color</dt>
+                                <dd class="col-9">Brown</dd>
+
+                                <dt class="col-3">Material</dt>
+                                <dd class="col-9">Cotton, Jeans</dd>
+
+                                <dt class="col-3">Brand</dt>
+                                <dd class="col-9">Reebook</dd>
+                                </div> *@
+
+                                <hr />
+
+                                <div class="row mb-4">
+
+                                    <!-- col.// -->
+                                    <div class="col-md-4 col-6 mb-3">
+                                        <label class="mb-2 d-block">Số lượng</label>
+                                        <div class="input-group mb-3" style="width: 170px;">
+                                            <button onclick="decreaseQuantity()" class="btn btn-white border border-secondary px-3" type="button" id="button-addon1" data-mdb-ripple-color="dark">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input type="text" class="form-control text-center border border-secondary" id="quantity" name="quantity" value="1" min="1" max="10" step="1" />
+                                            <button onclick="increaseQuantity()" class="btn btn-white border border-secondary px-3" type="button" id="button-addon2" data-mdb-ripple-color="dark">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (Model.ProductInventory?.QuantitySold >= Model.ProductInventory?.Quantity)
+                                {
+                                    <a class="btn btn-primary rounded-pill py-sm-3 px-sm-5"> Hết hàng </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="BuyNow" asp-controller="Order" asp-route-id="@Model.ProductId" class="btn btn-primary rounded-pill py-sm-3 px-sm-5"> Mua ngay </a>
+                                    <a href="@Url.Action("AddToCart", "Order", new{ id=Model.ProductId, strURL=Context.Request.Path})" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> <i class="me-1 fa fa-shopping-basket"></i> Thêm giỏ hàng </a>
+
+                                }
+                               
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            </section>
+            <!-- content -->
+
+        </div>
+    </div>
+</div>
+<script>
+    function decreaseQuantity() {
+        var quantityInput = document.getElementById('quantity');
+        var currentQuantity = parseInt(quantityInput.value);
+        if (currentQuantity > 1) {
+            quantityInput.value = currentQuantity - 1;
+        }
+    }
+
+    function increaseQuantity() {
+        var quantityInput = document.getElementById('quantity');
+        var currentQuantity = parseInt(quantityInput.value);
+        var maxQuantity = parseInt(quantityInput.max);
+        if (currentQuantity < maxQuantity) {
+            quantityInput.value = currentQuantity + 1;
+        }
+    }
+</script>

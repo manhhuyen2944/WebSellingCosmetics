@@ -1,0 +1,351 @@
+﻿@{
+    var AvartarClaim = User.Claims.FirstOrDefault(c => c.Type == "Avartar");
+    var Avartar = "";
+    if (AvartarClaim != null)
+    { Avartar = AvartarClaim.Value; }
+    var Userclaim = User.Claims.FirstOrDefault(x => x.Type == "UserName");
+    var UserName = "";
+    if (Userclaim != null)
+    {
+        UserName = Userclaim.Value;
+    }
+    var Idclaim = User.Claims.FirstOrDefault(x => x.Type == "Id");
+    var Id = "";
+    if (Idclaim != null)
+    {
+        Id = Idclaim.Value;
+    }
+    var AvatarAdmin = "/contents/Images/Admin/Admin.jpg";
+}
+
+<style>
+    .floating-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: limegreen; /* Màu xanh */
+        color: #fff; /* Màu chữ trắng */
+        border: none;
+        border-radius: 100%;
+        padding: 15px;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000; /* Đặt z-index cao để nút nổi lên trên các đối tượng khác */
+        outline: none; /* Loại bỏ đường viền khi được focus */
+    }
+
+        .floating-button.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0); /* Ẩn bằng cách thu nhỏ */
+        }
+
+
+        .floating-button i {
+            font-size: 1.5rem; /* Kích thước của biểu tượng */
+        }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f8f8;
+    }
+
+    #chat-container {
+        width: 300px;
+        height: 400px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: none;
+        background-color: #ddd;
+    }
+
+    #chat-header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        position: relative;
+    }
+
+    #close-button {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: white;
+    }
+
+    #chat-messages {
+        padding: 15px;
+        max-height: 300px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column; /* Thay đổi hướng của flex container thành từ trên xuống */
+    }
+
+    .message {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .user-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }   .user-avatar img {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .user1 .user-avatar {
+        background-color: #4CAF50;
+    }
+
+    .user2 .user-avatar {
+        background-color: gold;
+    }
+
+    .user1 {
+        justify-content: flex-end;
+    }
+
+    .message-content {
+        padding: 8px;
+        border-radius: 5px;
+        max-width: 70%;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        word-wrap: break-word;
+    }
+
+    .user1 .message-content {
+        background-color: #4CAF50;
+        color: white;
+        align-self: flex-end;
+        margin-right: 10px;
+    }
+
+    .user2 .message-content {
+        background-color: #f9f9f9;
+        color: #333;
+        align-self: flex-start;
+    }
+
+    #chat-input {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        background-color: #f9f9f9;
+    }
+
+    #user-input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-right: 10px;
+        outline: none;
+    }
+
+    #send-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #toggle-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: limegreen; /* Màu xanh */
+        color: #fff; /* Màu chữ trắng */
+        border: none;
+        border-radius: 100%;
+        padding: 15px;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000; /* Đặt z-index cao để nút nổi lên trên các đối tượng khác */
+        outline: none; /* Loại bỏ đường viền khi được focus */
+        display: block;
+    }
+</style>
+<!-- Footer Start -->
+<div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container py-5">
+        <div class="row g-5">
+            <div class="col-lg-3 col-md-6">
+                <h1 class="fw-bold text-primary m-0">Skin<span class="text-secondary"> & </span>Care</h1>
+                <p>
+                    Skin & Care - thương hiệu đi đầu trong ngành phân phối mỹ phẩm chính hãng, phục vụ cho nhu cầu mua sắm & làm đẹp của hàng triệu khách hàng tại Việt Nam.
+
+                </p>
+                <div class="d-flex pt-2">
+                    <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-twitter"></i></a>
+                    <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-youtube"></i></a>
+                    <a class="btn btn-square btn-outline-light rounded-circle me-0" href=""><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h4 class="text-light mb-4">Địa chỉ</h4>
+                <p><i class="bi bi-geo-alt-fill me-3"></i>159 Đ. Lê Duẩn, Khâm Thiên, Hai Bà Trưng, Hà Nội , Việt Nam</p>
+                <p><i class="bi bi-phone me-3"></i>0363337663</p>
+                <p><i class="fa fa-envelope me-3"></i>linhcosmetics@gmail.com</p>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h4 class="text-light mb-4">Đường dẫn</h4>
+                <a class="btn btn-link" href="">Trang chủ</a>
+                <a class="btn btn-link" href="">Sản phẩm</a>
+                <a class="btn btn-link" href="">Về chúng tôi</a>
+                <a class="btn btn-link" href="">Liên hệ</a>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <h4 class="text-light mb-4">Thông báo</h4>
+                <p>Nhập Email để nhận thông báo mới nhất.</p>
+                <div class="position-relative mx-auto" style="max-width: 400px;">
+                    <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
+                    <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Footer End -->
+<!-- Back to Top -->
+@if (User.Identity.IsAuthenticated)
+{
+    <button href="#" id="toggle-button">
+        <i class="bi bi-chat-dots"></i>
+    </button>
+    <div id="chat-container">
+        <div id="chat-header">
+            Chat Interface
+            <span id="close-button" onclick="toggleChat()">✖</span>
+        </div>
+        <div id="chat-messages">
+            <div style="" class="message user1">
+
+                <div class="message-content">Hello there!</div>
+                <div class="user-avatar"><img src="@Avartar" /></div>
+            </div>
+            <div style="" class="message user2">
+
+                <div class="user-avatar"></div>
+                <div class="message-content">Hi! How can I help you?</div>
+            </div>
+
+        </div>
+        <div id="chat-input">
+            <input id="avatar" type="hidden" value="@Avartar" />
+            <input id="Id" type="hidden" value="@Id" />
+
+            <input id="IdAdmin" type="hidden" value="1" />
+            <input id="avatarAdmin" type="hidden" value="@AvatarAdmin" />
+            <input type="text" id="user-input" placeholder="Nhập tin nhắn">
+            <button id="send-button" onclick="sendMessage()">Send</button>
+            <input type="hidden" id="nameUser" value="@UserName" />
+        </div>
+    </div>
+}
+
+
+
+<script>
+    const chatContainer = document.getElementById('chat-container');
+    const toggleButton = document.getElementById('toggle-button');
+
+    toggleButton.addEventListener('click', toggleChat);
+
+    function displayChatMessages(messages) {
+        var user1 = document.getElementById('Id').value;
+        var avatarValue = document.getElementById('avatar').value;
+        var avatarValue1 = document.getElementById('avatarAdmin').value;
+        var chatMessagesContainer = $('#chat-messages');
+       
+        // Clear existing messages
+        chatMessagesContainer.empty();
+
+        // Iterate through messages and append them to the container
+        messages.forEach(function (message) {
+            var messageDiv = $('<div>', { class: 'message', 'user': message.fromId });
+
+            if (message.fromId == user1) {
+                messageDiv.addClass('user1');
+                messageDiv.append(
+                    
+                    $('<div>', { class: 'message-content', text: message.messages }),
+                    $('<div>', { class: 'user-avatar' }).append($('<img>', { src: avatarValue }))
+                );
+            } else  {
+                messageDiv.addClass('user2');
+                messageDiv.append(
+                    $('<div>', { class: 'user-avatar' }).append($('<img>', { src: avatarValue1 })),
+                    $('<div>', { class: 'message-content', text: message.messages })
+                );
+            }
+
+            chatMessagesContainer.append(messageDiv);
+        });
+    }
+
+
+    function toggleChat() {
+
+        if (chatContainer.style.display === 'none' || chatContainer.style.display === '') {
+            chatContainer.style.display = 'block';
+            toggleButton.style.display = 'none'; // Ẩn nút "Toggle Chat"
+        } else {
+            chatContainer.style.display = 'none';
+            toggleButton.style.display = 'block'; // Hiển thị nút "Toggle Chat"
+        }
+        var fromUser = document.getElementById('nameUser').value; // Replace with the actual value
+        var toUser = 'Admin';   // Replace with the actual value
+
+        $.ajax({
+            url: '/Chat/GetChatData',
+            type: 'GET',
+            data: {
+                fromUser: fromUser,
+                toUser: toUser
+            },
+            dataType: 'json',
+            success: function (data) {
+                // console.log("Chat data retrieved successfully");
+                // console.log(data);  // Log the response data if needed
+                // Process the retrieved data as needed
+                displayChatMessages(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Ajax error:', status, error);
+                console.log(xhr.responseText);
+            }
+        });
+    }  
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
+<script src="~/js/chat.js"></script>
+<script src="~/lib/microsoft-signalr/signalr.js"></script>

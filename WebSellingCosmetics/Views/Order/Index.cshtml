@@ -1,0 +1,347 @@
+﻿@model IEnumerable<WebSellingCosmetics.Models.OderItem>
+
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var AddressId = ViewBag.AddressId;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Giỏ Hàng</title>
+    @*  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> *@
+    <style>
+        body {
+            background: #eecda3;
+            background: -webkit-linear-gradient(to right, #eecda3, #ef629f);
+            background: linear-gradient(to right, #eecda3, #ef629f);
+            min-height: 100vh;
+        }
+
+        .btn-red {
+            background-color: red;
+            color: white;
+        }
+
+        .transparent-button {
+            border: none;
+            background: none;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="px-4 px-lg-0" style="margin-top:150px">
+
+        <div class="pb-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5" style="border-radius:50px;">
+
+                        <!-- Shopping cart table -->
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="border-0 bg-light">
+                                            <div class="p-2 px-3 text-uppercase">Sán phẩm </div>
+                                        </th>
+                                        <th scope="col" class="border-0 bg-light">
+                                            <div class="py-2 text-uppercase">Giá</div>
+                                        </th>
+                                        <th scope="col" class="border-0 bg-light">
+                                            <div class="py-2 text-uppercase">Số lượng</div>
+                                        </th>
+                                        <th scope="col" class="border-0 bg-light">
+                                            <div class="py-2 text-uppercase">Thành tiền</div>
+                                        </th>
+                                        <th scope="col" class="border-0 bg-light">
+                                            <div class="py-2 text-uppercase">Chức năng</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int? SoSanPham = 0;
+                                        decimal? tongTien = 0;
+                                    }
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <th scope="row" class="border-0">
+                                                <div class="p-2">
+                                                    <img id="imggh" src="~/contents/Images/Product/@item.Product.Image" alt="" width="70" class="img-fluid rounded shadow-sm">
+                                                    <div class="ml-3 d-inline-block align-middle">
+                                                        <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">@item.Product.Name</a></h5>
+                                                        <span class="text-muted font-weight-normal font-italic d-block"></span>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <td class="border-0 align-middle"><strong>@String.Format("{0:#,##0}", item.Product.Price)</strong></td>
+                                            <td class="border-0 align-middle"><strong>@String.Format("{0:#,##0}", item.Quantity)</strong></td>
+                                            <td class="border-0 align-middle"><strong>@String.Format("{0:#,##0}", item.Product.Price * item.Quantity)</strong></td>
+                                            <td>
+                                                <div class="btn-group" role="group">
+
+                                                    <a href="@Url.Action("AddToCart","Order", new {id=item.ProductId, strURL=Context.Request.Path})" class="btn btn-link text-dark"><i class="fa fa-plus"></i></a>
+                                                    <a asp-action="UpdateOrder" asp-route-id="@item.ProductId" class="btn btn-link text-dark"><i class="fa fa-minus"></i></a>
+                                                    <a asp-action="RemoveProduct" asp-route-id="@item.ProductId" class="btn btn-link text-dark"><i class="fa fa-trash"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                        // Tính toán số sách và tổng tiền
+                                        SoSanPham += item.Quantity;
+                                        tongTien += (decimal?)(item.Product.Price * item.Quantity);
+                                    }
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End -->
+                    </div>
+                </div>
+                <form asp-action="CheckOut" asp-controller="Order">
+                    <div class="row py-5 p-4 bg-white rounded shadow-sm">
+
+
+
+                        <div class="col-lg-6">
+                            <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Mã giảm giá </div>
+                            <div class="p-4">
+                                <p class="font-italic mb-4">Nếu bạn có mã giảm giá ,hãy nhập nó vào đây </p>
+                                <div class="input-group mb-4 border rounded-pill p-2">
+                                    <input type="text" id="couponInput" placeholder="Apply coupon" name="MaGiamGia" aria-describedby="button-addon3" class="form-control border-0">
+                                    <div class="input-group-append border-0">
+
+                                        <button onclick="getDiscount()" id="button-addon3" type="button" class="btn btn-dark px-4 rounded-pill"><i class="fa fa-gift mr-2"></i>Apply coupon</button>
+                                    </div>
+
+                                </div>
+                                <p id="thongbao">
+
+                                </p>
+                            </div>
+                            <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">HƯỚNG DẪN DÀNH CHO NGƯỜI BÁN</div>
+                            <div class="p-4">
+                                <p class="font-italic mb-4">Nếu bạn có một số thông tin cho người bán, bạn có thể để lại chúng ở ô bên dưới</p>
+                                <textarea name="" cols="30" rows="2" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Thanh toán </div>
+                            <div class="p-4">
+                                <p class="font-italic mb-4">
+                                    Chi phí vận chuyển và chi phí bổ sung được tính dựa trên giá trị bạn đã nhập.
+
+                                </p>
+                                <ul class="list-unstyled mb-4">
+                                    <li class="d-flex justify-content-between py-3 border-bottom">
+                                        <strong class="text-muted">Đơn vị vận chuyển:</strong>
+                                        <select class="form-control" name="Shiper" id="shipperSelect" placeholder="" required>
+                                            <option value="1" selected> Bưu điện </option>
+                                            <option value="2">Giao hàng tiết kiệm</option>
+                                        </select>
+                                    </li>
+
+                                    <li class="d-flex justify-content-between py-3 border-bottom">
+                                        <div class="row">
+                                            <strong class="control-label"> Địa chỉ giao hàng</strong>
+                                            <div class="col-lg-11 grid-margin stretch-card">
+                                                <select name="Address" asp-items="AddressId" class="form-select" required>
+                                                    <option value="">-- Chọn Địa chỉ giao hàng --</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-1 grid-margin stretch-card">
+                                                <button type="button" onclick="MoModal()" class="action-icon transparent-button">
+                                                    <i class="fas fa-plus" style="color:limegreen;font-size:25px;"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+
+                                    </li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom">
+                                        <strong class="text-muted">Phương thức thanh toán:</strong>
+                                        <select class="form-control" name="Pay" placeholder="" required>
+                                            <option value="1" selected> COD </option>
+                                            <option value="2">VNPay</option>
+                                        </select>
+                                    </li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom">
+                                        <strong class="text-muted">Tổng số lượng sách:</strong>
+                                        <h5 class="font-weight-bold">@String.Format("{0:#,##0}", SoSanPham) Sản phẩm</h5>
+                                        <input type="hidden" name="SoSanPham" value="@SoSanPham" />
+                                    </li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom">
+                                        <strong class="text-muted">Thành tiền</strong>
+                                        <h5 class="font-weight-bold">@String.Format("{0:#,##0}", tongTien) VNĐ</h5>
+                                        <input type="hidden" id="tongtien" name="tongtien" value="@tongTien" />
+                                    </li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom">
+                                        <strong class="text-muted">Phí vận chuyển</strong>
+                                        <h5 class="font-weight-bold" id="shippingFee" value ="30000">30,000 VNĐ</h5>
+                                       
+                                    </li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom">
+                                        <strong class="text-muted">Giảm giá</strong>
+                                        <h5 id="giamgia" value="0">0 VNĐ</h5>
+                                    </li>
+                                    <li class="d-flex justify-content-between py-3 border-bottom">
+                                        <strong class="text-muted">Thanh toán</strong>
+                                        <h5 class="font-weight-bold" id="thanhtoan">@String.Format("{0:#,##0}", tongTien +30000 ) VNĐ</h5>
+                                       
+                                    </li>
+                                </ul>
+                                <button type="submit" class="btn btn-dark rounded-pill py-2 btn-block">Thanh toán</button>
+                                <a asp-action="RemoveCart" class="btn btn-dark rounded-pill py-2 btn-block btn-red">Xóa giỏ hàng</a>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Create" asp-controller="Account" asp-route-url="@Context.Request.Path">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm địa chỉ</h4>
+                    <button type="button" onclick="DongModal()" style="border:none; outline:none;" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" name="streest" placeholder="Tên đường" required>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" name="ward" placeholder="Phường" required>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" name="distrist" placeholder="Quận" required>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" name="city" placeholder="Thành phố" required>
+                    </div>
+                    <hr />
+                    <div class="form-group">
+                        <input class="form-control form-control-lg" name="contry" placeholder="Quốc gia">
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Thêm</button>
+                    <button type="button" class="btn btn-danger" onclick="DongModal()" data-dismiss="modal">Đóng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+
+    function getDiscount() {
+        var couponInput = document.getElementById("couponInput");
+        var couponValue = couponInput.value;
+        var code = couponValue;
+
+        $.ajax({
+            url: '/Order/GetDiscount',
+            type: 'GET',
+            data: { ma: code },
+            success: function (data) {
+                if (data) {
+                    $('#thongbao').text('ÁP MÃ THÀNH CÔNG').css({
+                        'color': 'green',
+                        'font-weight': 'bold'
+                    });
+
+                    var shippingFeeElement = document.getElementById('shippingFee');
+                    var magiamgia = document.getElementById('giamgia');
+                    var tongTienElement = document.getElementById('tongtien').value;
+                    var selectedShipperValue = document.getElementById('shipperSelect').value;
+                    var total = document.getElementById('thanhtoan');
+
+                    var tongTienValue = parseFloat(tongTienElement);
+                    var giamgia = data.discountPercent;
+                    var shippingFee = (selectedShipperValue === '1') ? 30000 : 45000;
+
+                    shippingFeeElement.innerText = formatCurrency(shippingFee) + ' VNĐ';
+                    shippingFeeElement.setAttribute('value', shippingFee);
+                    magiamgia.setAttribute('value', giamgia);
+
+                    var thanhtoan = tongTienValue - giamgia + shippingFee;
+
+                    $('#giamgia').text(formatCurrency(data.discountPercent) + ' VNĐ');
+                    $('#thanhtoan').text(formatCurrency(thanhtoan) + ' VNĐ');
+
+                   
+                } else {
+                    $('#thongbao').text('Mã giảm giá không tồn tại').css({
+                        'color': 'red',
+                        'font-weight': 'bold'
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+    };
+
+    function MoModal() {
+        $('#myModal').modal('show');
+    };
+    function DongModal() {
+        $('#myModal').modal('hide');
+    };
+    document.getElementById('shipperSelect').addEventListener('change', function () {
+        var shippingFeeElement = document.getElementById('shippingFee');
+        var tongTienElement = document.getElementById('tongtien').value;
+        var giamgiaElement = document.getElementById('giamgia');
+        var selectedShipperValue = this.value;
+        var total = document.getElementById('thanhtoan');
+
+        // Chuyển đổi giá trị của tongTienElement từ chuỗi sang số
+        var tongTienValue = parseFloat(tongTienElement);
+
+        // Lấy giá trị của giảm giá từ thuộc tính value của phần tử h5
+        var giamgiaValue = parseFloat(giamgiaElement.getAttribute('value'));
+
+        // Cập nhật giá trị phí vận chuyển dựa trên lựa chọn
+        var shippingFee = (selectedShipperValue === '1') ? 30000 : 45000;
+
+        // Cập nhật thuộc tính khác thay vì value
+        shippingFeeElement.setAttribute('value', shippingFee);
+
+        // Cập nhật text hiển thị
+        shippingFeeElement.innerText = formatCurrency(shippingFee) + ' VNĐ';
+
+        // Cập nhật giá trị ẩn
+        var tongtien = tongTienValue + shippingFee - giamgiaValue;
+        total.innerText = formatCurrency(tongtien) + ' VNĐ';
+
+      
+
+    });
+
+
+    // Hàm định dạng số tiền thành chuỗi có dấu phẩy
+    function formatCurrency(amount) {
+        return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+
+</script>

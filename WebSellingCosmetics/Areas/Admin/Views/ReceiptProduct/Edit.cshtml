@@ -1,0 +1,71 @@
+﻿@model WebSellingCosmetics.Models.ReceiptProduct
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h1>SỬA PHIẾU NHẬP SẢN PHẨM</h1>
+            <h4>Nhập thông tin</h4>
+            <hr />
+            <div class="row">
+                <div class="col-md-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="ReceiptProductId" />
+                        <div class="form-group">
+                            <label asp-for="ProductId" class="control-label"></label>
+                            <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+                            <span asp-validation-for="ProductId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Quantity" class="control-label"></label>
+                            <input asp-for="Quantity" class="form-control" />
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Price" class="control-label"></label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <div class="form-group  flex-grow-1 mx-4">
+                            <img src="@Url.Content("~/contents/Images/ReceiptProduct/" + @Model.Image)" style="width: 200px; height: 200px; border-radius: 20px;" alt="" id="output">
+                            <label asp-for="Image" class="control-label"> Hình ảnh đại diện</label>
+                            <input type="file" name="fAvatar" asp-for="Image" class="form-control-file" onchange="loadFile(event)" />
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng Thái</label>
+                            <select class="form-control" asp-for="Status" placeholder="" required>
+                                <option value="1" selected>Hoạt động</option>
+                                <option value="2">Ngừng hoạt động</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-gradient-primary me-2">Thêm Mới</button>
+                            <a asp-action="Index" class="btn btn-light">Trở về</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+           
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        var loadFile = function (event) {
+            var image = document.getElementById("output");
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
+}

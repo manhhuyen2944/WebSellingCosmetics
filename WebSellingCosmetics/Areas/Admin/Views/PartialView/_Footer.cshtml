@@ -1,0 +1,276 @@
+﻿@{
+    var AvartarClaim = User.Claims.FirstOrDefault(c => c.Type == "Avartar");
+    var Avartar = "";
+    if (AvartarClaim != null)
+    { Avartar = AvartarClaim.Value; }
+    var Userclaim = User.Claims.FirstOrDefault(x => x.Type == "UserName");
+    var UserName = "";
+    if (Userclaim != null)
+    {
+        UserName = Userclaim.Value;
+    }
+    var Idclaim = User.Claims.FirstOrDefault(x => x.Type == "Id");
+    var Id = "";
+    if (Idclaim != null)
+    {
+        Id = Idclaim.Value;
+    }
+    var AvatarAdmin = "/contents/Images/Admin/Admin.jpg";
+}
+
+<style>
+   
+
+    #chat-container {
+        width: 300px;
+        height: 400px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        display: none;
+        background-color: #ddd;
+    }
+
+    #chat-header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        position: relative;
+    }
+
+    #close-button {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: white;
+    }
+
+    #chat-messages {
+        padding: 15px;
+        max-height: 300px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column; /* Thay đổi hướng của flex container thành từ trên xuống */
+    }
+
+    .message {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+
+    .user-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+        .user-avatar img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+    .user1 .user-avatar {
+        background-color: #4CAF50;
+    }
+
+    .user2 .user-avatar {
+        background-color: gold;
+    }
+
+    .user1 {
+        justify-content: flex-end;
+    }
+
+    .message-content {
+        padding: 8px;
+        border-radius: 5px;
+        max-width: 70%;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        word-wrap: break-word;
+    }
+
+    .user1 .message-content {
+        background-color: #4CAF50;
+        color: white;
+        align-self: flex-end;
+        margin-right: 10px;
+    }
+
+    .user2 .message-content {
+        background-color: #f9f9f9;
+        color: #333;
+        align-self: flex-start;
+    }
+
+    #chat-input {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        background-color: #f9f9f9;
+    }
+
+    #user-input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-right: 10px;
+        outline: none;
+    }
+
+    #send-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #toggle-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: limegreen; /* Màu xanh */
+        color: #fff; /* Màu chữ trắng */
+        border: none;
+        border-radius: 100%;
+        padding: 15px;
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000; /* Đặt z-index cao để nút nổi lên trên các đối tượng khác */
+        outline: none; /* Loại bỏ đường viền khi được focus */
+        display: block;
+    }
+</style>
+<!-- Footer Start -->
+
+<!-- Footer End -->
+<!-- Back to Top -->
+<button style="display:none" href="#" id="toggle-button">
+    <i class="fas fa-comments"></i>
+
+</button>
+
+<div id="chat-container">
+    <div id="chat-header">
+        Chat Interface
+        <span id="close-button" onclick="toggleChat()">✖</span>
+    </div>
+    <div id="chat-messages">
+        <div style="" class="message user1">
+
+            <div class="message-content">Hello there!</div>
+            <div class="user-avatar"><img src="@Avartar" /></div>
+        </div>
+        <div style="" class="message user2">
+
+            <div class="user-avatar"></div>
+            <div class="message-content">Hi! How can I help you?</div>
+        </div>
+
+    </div>
+    <div id="chat-input">
+        <input id="avatar" type="hidden" value="@Avartar" />
+        <input id="Id" type="hidden" value="@Id" />
+
+        <input id="IdAdmin" type="hidden" value="1" />
+        <input id="avatarAdmin" type="hidden" value="@AvatarAdmin" />
+        <input type="text" id="user-input" placeholder="Nhập tin nhắn">
+        <button id="send-button" onclick="sendMessageAdmin()">Send</button>
+        <input type="hidden" id="nameUser" value="@UserName" />
+    </div>
+</div>
+<script>
+    const chatContainer = document.getElementById('chat-container');
+    const toggleButton = document.getElementById('toggle-button');
+
+    toggleButton.addEventListener('click', toggleChat);
+
+    function displayChatMessages(messages) {
+        var user1 = document.getElementById('Id').value;
+        var avatarValue = document.getElementById('avatar').value;
+        var avatarValue1 = document.getElementById('avatarAdmin').value;
+        var chatMessagesContainer = $('#chat-messages');
+
+        // Clear existing messages
+        chatMessagesContainer.empty();
+
+        // Iterate through messages and append them to the container
+        messages.forEach(function (message) {
+            var messageDiv = $('<div>', { class: 'message', 'user': message.fromId });
+
+            if (message.fromId == user1) {
+                messageDiv.addClass('user1');
+                messageDiv.append(
+
+                    $('<div>', { class: 'message-content', text: message.messages }),
+                    $('<div>', { class: 'user-avatar' }).append($('<img>', { src: avatarValue }))
+                );
+            } else {
+                messageDiv.addClass('user2');
+                messageDiv.append(
+                    $('<div>', { class: 'user-avatar' }).append($('<img>', { src: '/contents/Images/User/' + message.avatar })),
+                    $('<div>', { class: 'message-content', text: message.messages }),
+                    $('<input>', { id: 'avatarUser', type: 'hidden', value: message.avatar }),
+                    $('<input>', { id: 'touser', type: 'hidden', value: message.touser }) // or message.messages
+                );
+            }
+            chatMessagesContainer.append(messageDiv);
+        });
+    }
+    function toggleChat() {
+
+        if (chatContainer.style.display === 'none' || chatContainer.style.display === '') {
+            chatContainer.style.display = 'block';
+            
+        } else {
+            chatContainer.style.display = 'none';
+        }
+    }
+    function toggleChat1(ToUser) {
+        chatContainer.style.display = 'block';
+        var fromUser = 'Admin';  
+        $.ajax({
+            url: '/Chat/GetChatData',
+            type: 'GET',
+            data: {
+                fromUser: fromUser,
+                toUser: ToUser
+            },
+            dataType: 'json',
+            success: function (data) {
+                displayChatMessages(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Ajax error:', status, error);
+                console.log(xhr.responseText);
+            }
+        });
+    }
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
+
+<script src="~/js/chat.js"></script>
+<script src="~/lib/microsoft-signalr/signalr.js"></script>
